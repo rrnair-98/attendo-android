@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.rohan.attendo.api.chirp.ChirpWrapper;
 import com.rohan.attendo.api.models.requests.LoginRequest;
 import com.rohan.attendo.api.models.response.AccessToken;
+import com.rohan.attendo.api.models.response.Lecture;
 import com.rohan.attendo.api.retrofit.RetrofitApiClient;
 import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
@@ -18,16 +19,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import io.chirp.chirpsdk.models.ChirpError;
 
-public class MainActivity extends AppCompatActivity implements LoginPopupFragment.LoginPopupFragmentCallback {
+public class MainActivity extends AppCompatActivity implements LoginPopupFragment.LoginPopupFragmentCallback,
+  LectureListFragment.LectureClickedListener {
 
 
     private static final String TAG = "attendo.MAinActivity";
@@ -148,7 +152,9 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 //        }
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentHolder, new LectureListFragment(), TAG).commit();
+        LectureListFragment lectureListFragment = new LectureListFragment();
+        lectureListFragment.setLectureClickedListener(this);
+        fragmentTransaction.add(R.id.fragmentHolder, lectureListFragment).commit();
     }
 
 
@@ -156,5 +162,10 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
     protected void onDestroy() {
         super.onDestroy();
         this.chirpWrapper.stop();
+    }
+
+    @Override
+    public void onLectureClicked(Lecture lecture) {
+        Toast.makeText(this, lecture.getLectureName(), Toast.LENGTH_SHORT).show();
     }
 }
