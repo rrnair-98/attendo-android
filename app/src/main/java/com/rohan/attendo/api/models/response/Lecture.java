@@ -8,6 +8,9 @@ public class Lecture {
     @SerializedName("lecture_name")
     private String lectureName;
 
+    @SerializedName("actual_relation_id")
+    private Long relationId; // to be sent to the server to fetch attendance
+
     public Lecture(){}
 
     public Lecture(Long id, String lectureName) {

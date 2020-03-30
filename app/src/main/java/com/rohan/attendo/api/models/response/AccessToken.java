@@ -16,12 +16,14 @@ public class AccessToken {
     @SerializedName("refresh_token")
     private String refreshToken;
 
+    @SerializedName("role")
     private Integer role;
 
 
     public static Integer ROLE_STUDENT = 0;
     public static Integer ROLE_TEACHER = 8;
     public static Integer ROLE_HOD = 65536;
+    public static Integer ROLE_ADMIN = 2147483647;
 
     public AccessToken(){}
 
@@ -90,5 +92,7 @@ public class AccessToken {
     public boolean isStudent(){
         return this.role.equals( ROLE_STUDENT);
     }
+
+    public boolean isHOD(){return this.role.equals(ROLE_HOD);}
 
 }
