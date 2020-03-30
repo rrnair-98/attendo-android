@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.rohan.attendo.api.chirp.ChirpWrapper;
 import com.rohan.attendo.api.models.requests.LoginRequest;
@@ -21,7 +20,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -42,11 +40,11 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
         this.chirpWrapper = ChirpWrapper.getInstance(this);
         setSupportActionBar(toolbar);
 
-        RetrofitApiClient.getInstance(this).login(new LoginRequest(" lynch.angelica@hotmail.com", "temp"), new Reverberator() {
+        RetrofitApiClient.getInstance(this).login(new LoginRequest("anton@gmail.com", "password"), new Reverberator() {
             @Override
             public void reverb(Object data, int httpResponseCode) {
                 if(httpResponseCode == 200){
-                    Log.d("SUCCESS ", ((AccessToken) data).getToken());
+                    Log.d("SUCCESS ", ((AccessToken) data).getAccessToken());
                 }else
                     Log.wtf("FAILED ", httpResponseCode+"");
             }

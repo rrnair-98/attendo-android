@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:hint="Some random Lecture"
+            android:id="@+id/lectureName"
+            android:textSize="20dp"
+            android:layout_margin="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/lectureName"
+            android:id="@+id/lecAtt"
+            android:hint="20%"
+            android:textSize="20dp"
+            />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/totalLectures"
+            android:layout_below="@+id/lectureName"
+            />
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/lecturesSat"
+            android:layout_below="@+id/lecAtt"
+            android:layout_toRightOf="@+id/totalLectures"
+            />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView >

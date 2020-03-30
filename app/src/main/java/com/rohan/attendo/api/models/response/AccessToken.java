@@ -7,12 +7,12 @@ public class AccessToken {
     private Long id;
     @SerializedName("user_id")
     private Long userId;
-    @SerializedName("created_at")
-    private Long createdAt;
-    @SerializedName("refresh_token_expires_at")
+    @SerializedName("access_token_expiry")
+    private Long accessTokenExpiry;
+    @SerializedName("refresh_token_expiry")
     private Long refreshTokenExpiresAt;
-    @SerializedName("token")
-    private String token;
+    @SerializedName("access_token")
+    private String accessToken;
     @SerializedName("refresh_token")
     private String refreshToken;
 
@@ -26,12 +26,12 @@ public class AccessToken {
     public AccessToken(){}
 
 
-    public AccessToken(Long id, Long userId, Long createdAt, Long refreshTokenExpiresAt, String token, String refreshToken) {
+    public AccessToken(Long id, Long userId, Long accessTokenExpiry, Long refreshTokenExpiresAt, String accessToken, String refreshToken) {
         this.id = id;
         this.userId = userId;
-        this.createdAt = createdAt;
+        this.accessTokenExpiry = accessTokenExpiry;
         this.refreshTokenExpiresAt = refreshTokenExpiresAt;
-        this.token = token;
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
@@ -52,11 +52,11 @@ public class AccessToken {
     }
 
     public Long getCreatedAt() {
-        return createdAt;
+        return accessTokenExpiry;
     }
 
     public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
+        this.accessTokenExpiry = createdAt;
     }
 
     public Long getRefreshTokenExpiresAt() {
@@ -67,12 +67,12 @@ public class AccessToken {
         this.refreshTokenExpiresAt = refreshTokenExpiresAt;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getRefreshToken() {

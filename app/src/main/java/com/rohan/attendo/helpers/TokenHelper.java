@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * This class persists the token to a local file.
+ * It is the responsibility of the caller to call the persistToken method to store it.
+ */
 public class TokenHelper {
     private AccessToken token;
     private Context mContext;
