@@ -11,6 +11,7 @@ import com.rohan.attendo.api.models.response.AccessToken;
 import com.rohan.attendo.api.retrofit.RetrofitApiClient;
 import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
+import com.rohan.attendo.ui.LectureListFragment;
 import com.rohan.attendo.ui.LoginPopupFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.Menu;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
                     Log.e(TAG, httpResponseCode+" Failed to Login");
             }
         });
-
+        init();
     }
 
     @Override
@@ -138,12 +140,15 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
 
     private void init(){
-        this.fragmentManager = this.getSupportFragmentManager();
-        this.tokenHelper = TokenHelper.getInstance(this);
-        this.tokenHelper.readToken();
-        if(this.tokenHelper.isTokenNull()){
-            //todo show popup dialog
-        }
+//        this.fragmentManager = this.getSupportFragmentManager();
+//        this.tokenHelper = TokenHelper.getInstance(this);
+//        this.tokenHelper.readToken();
+//        if(this.tokenHelper.isTokenNull()){
+//            //todo show popup dialog
+//        }
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragmentHolder, new LectureListFragment(), TAG).commit();
     }
 
 
