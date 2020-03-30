@@ -8,26 +8,34 @@ import com.google.android.material.snackbar.Snackbar;
 import com.rohan.attendo.api.chirp.ChirpWrapper;
 import com.rohan.attendo.api.models.requests.LoginRequest;
 import com.rohan.attendo.api.models.response.AccessToken;
+import com.rohan.attendo.api.models.response.Lecture;
 import com.rohan.attendo.api.retrofit.RetrofitApiClient;
 import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
+import com.rohan.attendo.ui.LectureListFragment;
 import com.rohan.attendo.ui.LoginPopupFragment;
+import com.rohan.attendo.ui.StudentAudioQrFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import io.chirp.chirpsdk.models.ChirpError;
 
-public class MainActivity extends AppCompatActivity implements LoginPopupFragment.LoginPopupFragmentCallback {
+public class MainActivity extends AppCompatActivity implements LoginPopupFragment.LoginPopupFragmentCallback,
+  LectureListFragment.LectureClickedListener {
 
 
+    private static final String TAG = "attendo.MAinActivity";
     private FragmentManager fragmentManager;
     private TokenHelper tokenHelper;
 
@@ -44,12 +52,12 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
             @Override
             public void reverb(Object data, int httpResponseCode) {
                 if(httpResponseCode == 200){
-                    Log.d("SUCCESS ", ((AccessToken) data).getAccessToken());
+                    Log.d(TAG, ((AccessToken) data).getAccessToken());
                 }else
-                    Log.wtf("FAILED ", httpResponseCode+"");
+                    Log.e(TAG, httpResponseCode+" Failed to Login");
             }
         });
-
+        init();
     }
 
     @Override
@@ -137,12 +145,17 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
 
     private void init(){
-        this.fragmentManager = this.getSupportFragmentManager();
-        this.tokenHelper = TokenHelper.getInstance(this);
-        this.tokenHelper.readToken();
-        if(this.tokenHelper.isTokenNull()){
-            //todo show popup dialog
-        }
+//        this.fragmentManager = this.getSupportFragmentManager();
+//        this.tokenHelper = TokenHelper.getInstance(this);
+//        this.tokenHelper.readToken();
+//        if(this.tokenHelper.isTokenNull()){
+//            //todo show popup dialog
+//        }
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        LectureListFragment lectureListFragment = new LectureListFragment();
+        lectureListFragment.setLectureClickedListener(this);
+        fragmentTransaction.add(R.id.fragmentHolder, lectureListFragment).commit();
     }
 
 
@@ -150,5 +163,14 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
     protected void onDestroy() {
         super.onDestroy();
         this.chirpWrapper.stop();
+    }
+
+    @Override
+    public void onLectureClicked(Lecture lecture) {
+        StudentAudioQrFragment studentAudioQrFragment = new StudentAudioQrFragment();
+        studentAudioQrFragment.setLecture(lecture);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentHolder, studentAudioQrFragment).addToBackStack(null).commit();
     }
 }
