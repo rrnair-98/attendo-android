@@ -28,6 +28,7 @@ import io.chirp.chirpsdk.models.ChirpError;
 public class MainActivity extends AppCompatActivity implements LoginPopupFragment.LoginPopupFragmentCallback {
 
 
+    private static final String TAG = "attendo.MAinActivity";
     private FragmentManager fragmentManager;
     private TokenHelper tokenHelper;
 
@@ -44,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
             @Override
             public void reverb(Object data, int httpResponseCode) {
                 if(httpResponseCode == 200){
-                    Log.d("SUCCESS ", ((AccessToken) data).getAccessToken());
+                    Log.d(TAG, ((AccessToken) data).getAccessToken());
                 }else
-                    Log.wtf("FAILED ", httpResponseCode+"");
+                    Log.e(TAG, httpResponseCode+" Failed to Login");
             }
         });
 
