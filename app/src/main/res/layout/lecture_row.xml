@@ -2,11 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="60dp">
-    <ImageView
+    <TextView
         android:id="@+id/lectureIcon"
-        android:src="@mipmap/ic_launcher"
+        android:textColor="#26ae90"
+        android:textSize="35dp"
+        android:text=""
+        android:textAlignment="center"
         android:layout_width="50dp"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/circle"/>
     <TextView
         android:id="@+id/lectureName"
         android:gravity="center_vertical"
