@@ -12,6 +12,7 @@ import com.rohan.attendo.api.models.response.AccessToken;
 import com.rohan.attendo.api.models.response.AttendancePercent;
 import com.rohan.attendo.api.models.response.AttendanceToken;
 import com.rohan.attendo.api.models.response.Lecture;
+import com.rohan.attendo.api.models.response.User;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -199,8 +200,14 @@ public class RetrofitApiClient {
         this.enque(stringCall, reverberator);
     }
 
-    public void getStudentAttendance(String authToken, String startDate, String endDate, Long studentId, Reverberator reverberator){
-        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceByStudentId(startDate, endDate, studentId);
+    public void getStudentInformationFromAttendanceToken(String authorizationToken, String attendanceToken, Reverberator reverberator){
+        Call<User> userCall = this.mRetrofitApiInterface.getStudentByAttendanceToken(authorizationToken, attendanceToken);
+        this.enque(userCall, reverberator);
+    }
+
+
+    public void getStudentAttendance(String authToken, String startDate, String endDate, Long studentLectureId, Reverberator reverberator){
+        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceForStudentByStudentLectureId(studentLectureId);
         this.enque(listCall, reverberator);
     }
 
@@ -208,13 +215,6 @@ public class RetrofitApiClient {
         Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceByLectureId(startDate, endDate, lectureId);
         this.enque(listCall, reverberator);
     }
-
-    public void getByStudentAndLecture(String authToken, String startDate, String endDate, Long studentId, Long lectureId, Reverberator reverberator){
-        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceByLectureAndStudentId(startDate, endDate, studentId, lectureId);
-        this.enque(listCall, reverberator);
-    }
-
-
 
 
 }

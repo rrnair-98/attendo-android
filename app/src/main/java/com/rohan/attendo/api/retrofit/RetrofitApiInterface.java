@@ -6,6 +6,7 @@ import com.rohan.attendo.api.models.response.AccessToken;
 import com.rohan.attendo.api.models.response.AttendancePercent;
 import com.rohan.attendo.api.models.response.AttendanceToken;
 import com.rohan.attendo.api.models.response.Lecture;
+import com.rohan.attendo.api.models.response.User;
 
 import java.util.List;
 
@@ -28,13 +29,15 @@ public interface RetrofitApiInterface {
     public Call<AccessToken> refresh(@Header("Authorization") String authToken,
                                      @Path("refreshToken") String refreshToken);
 
-    @POST("attendanceToken/create")
-    public Call<AttendanceToken> getOrCreateAttendanceToken(@Header("Authorization") String authToken);
 
     @POST("teacher/attendance/{teacherLectureId}")
     public Call<String> bulkInsertAttendance(@Header("Authorization") String token,
                                              @Path("teacherLectureId") Long teacherLectureId,
                                              @Body AttendanceBulkInsert bulkInsert);
+
+    @GET("teacher/student/att-token/{attendanceToken}")
+    public Call<User> getStudentByAttendanceToken(@Header("Authorization")String authToken,
+                                                  @Path("attendanceToken") String attendanceToken);
 
     @GET("teacher/lectures/")
     public Call<List<Lecture>> getLecturesForTeacher(@Header("Authorization") String authToken);
@@ -42,12 +45,13 @@ public interface RetrofitApiInterface {
     @GET("student/lectures")
     public Call<List<Lecture>> getLecturesForStudent(@Header("Authorization") String authToken);
 
+    @POST("student/attendance-token")
+    public Call<AttendanceToken> getOrCreateAttendanceToken(@Header("Authorization") String authToken);
 
 
-    @GET("attendance/student/{start}/{end}/{studentId}")
-    public Call<List<AttendancePercent>> getAttendanceByStudentId(@Path("start") String startDate,
-                                                                  @Path("end") String endDate,
-                                                                  @Path("studentId") Long studentId);
+
+    @GET("student/attendance/{studentLectureId}")
+    public Call<List<AttendancePercent>> getAttendanceForStudentByStudentLectureId(@Path("studentLectureId") Long studentLectureId);
 
 
     @GET("attendance/student/{start}/{end}/{lectureId}")

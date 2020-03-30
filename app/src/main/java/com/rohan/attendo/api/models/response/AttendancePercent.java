@@ -3,31 +3,28 @@ package com.rohan.attendo.api.models.response;
 import com.google.gson.annotations.SerializedName;
 
 public class AttendancePercent {
-    @SerializedName("student_id")
+    @SerializedName("id")
     private Long studentId;
 
+    @SerializedName("roll_number")
+    private Long rollNumber;
+
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("percentage")
     private Double percentage;
 
-    @SerializedName("lecture_id")
-    private Long lectureId;
-
-    @SerializedName("lecture_name")
-    private String lectureName;
-
-    @SerializedName("lecs_attended")
-    private Long lecsAttended;
-
-    @SerializedName("num")
+    @SerializedName("total_lectures")
     private Long totalLectures;
 
     public AttendancePercent(){}
 
-    public AttendancePercent(Long studentId, Double percentage, Long lectureId, String lectureName, Long lecsAttended, Long totalLectures) {
+    public AttendancePercent(Long studentId, Long rollNumber, String name, Double percentage, Long totalLectures) {
         this.studentId = studentId;
+        this.rollNumber = rollNumber;
+        this.name = name;
         this.percentage = percentage;
-        this.lectureId = lectureId;
-        this.lectureName = lectureName;
-        this.lecsAttended = lecsAttended;
         this.totalLectures = totalLectures;
     }
 
@@ -39,36 +36,28 @@ public class AttendancePercent {
         this.studentId = studentId;
     }
 
+    public Long getRollNumber() {
+        return rollNumber;
+    }
+
+    public void setRollNumber(Long rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Double getPercentage() {
         return percentage;
     }
 
     public void setPercentage(Double percentage) {
         this.percentage = percentage;
-    }
-
-    public Long getLectureId() {
-        return lectureId;
-    }
-
-    public void setLectureId(Long lectureId) {
-        this.lectureId = lectureId;
-    }
-
-    public String getLectureName() {
-        return lectureName;
-    }
-
-    public void setLectureName(String lectureName) {
-        this.lectureName = lectureName;
-    }
-
-    public Long getLecsAttended() {
-        return lecsAttended;
-    }
-
-    public void setLecsAttended(Long lecsAttended) {
-        this.lecsAttended = lecsAttended;
     }
 
     public Long getTotalLectures() {
