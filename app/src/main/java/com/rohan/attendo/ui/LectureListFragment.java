@@ -25,8 +25,6 @@ import java.util.List;
 
 public class LectureListFragment extends Fragment {
 
-    public static final String LECTURE_CLICKED_LISTENER_KEY = "lectureClickedListener";
-
     private RecyclerView recyclerView;
     private RetrofitApiClient client;
     private TokenHelper tokenHelper;

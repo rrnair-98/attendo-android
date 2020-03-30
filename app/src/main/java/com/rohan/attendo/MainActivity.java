@@ -14,6 +14,7 @@ import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
 import com.rohan.attendo.ui.LectureListFragment;
 import com.rohan.attendo.ui.LoginPopupFragment;
+import com.rohan.attendo.ui.StudentAudioQrFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -166,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
     @Override
     public void onLectureClicked(Lecture lecture) {
-        Toast.makeText(this, lecture.getLectureName(), Toast.LENGTH_SHORT).show();
+        StudentAudioQrFragment studentAudioQrFragment = new StudentAudioQrFragment();
+        studentAudioQrFragment.setLecture(lecture);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentHolder, studentAudioQrFragment).addToBackStack(null).commit();
     }
 }
