@@ -11,6 +11,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -20,20 +21,27 @@ public interface RetrofitApiInterface {
     @POST("login")
     public Call<AccessToken> login(@Body LoginRequest loginRequest);
 
+    @DELETE("logout")
+    public Call<String> logout(@Header("Authorization") String authToken);
+
+    @POST("refresh/{refreshToken}")
+    public Call<AccessToken> refresh(@Header("Authorization") String authToken,
+                                     @Path("refreshToken") String refreshToken);
+
     @POST("attendanceToken/create")
     public Call<AttendanceToken> getOrCreateAttendanceToken(@Header("Authorization") String authToken);
 
-    @POST("attendance/{teacherId}/{lectureId}")
+    @POST("teacher/attendance/{teacherLectureId}")
     public Call<String> bulkInsertAttendance(@Header("Authorization") String token,
-                                             @Path("teacherId") Long teacherId,
-                                             @Path("lectureId") Long lectureId,
+                                             @Path("teacherLectureId") Long teacherLectureId,
                                              @Body AttendanceBulkInsert bulkInsert);
 
-    @GET("lectures/teacher/{teacherId}")
-    public Call<List<Lecture>> getLecturesByTeacher(@Path("teacherId") Long teacherId);
+    @GET("teacher/lectures/")
+    public Call<List<Lecture>> getLecturesForTeacher(@Header("Authorization") String authToken);
 
-    @GET("lectures/department/{departmentId}")
-    public Call<List<Lecture>> getLecturesByDepartment(@Path("departmentId") Long departmentId);
+    @GET("student/lectures")
+    public Call<List<Lecture>> getLecturesForStudent(@Header("Authorization") String authToken);
+
 
 
     @GET("attendance/student/{start}/{end}/{studentId}")

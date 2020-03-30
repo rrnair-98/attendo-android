@@ -3,24 +3,16 @@ package com.rohan.attendo.api.models.response;
 import com.google.gson.annotations.SerializedName;
 
 public class Lecture {
+    @SerializedName("id")
     private Long id;
-    @SerializedName("teacher_id")
-    private Long teacherId;
-    @SerializedName("lecture_number")
-    private Integer lectureNumber;
-    @SerializedName("day_of_week")
-    private Integer dayOfWeek;
-    @SerializedName("subject_name")
-    private String subjectName;
+    @SerializedName("lecture_name")
+    private String lectureName;
 
     public Lecture(){}
 
-    public Lecture(Long id, Long teacherId, Integer lectureNumber, Integer dayOfWeek, String subjectName) {
+    public Lecture(Long id, String lectureName) {
         this.id = id;
-        this.teacherId = teacherId;
-        this.lectureNumber = lectureNumber;
-        this.dayOfWeek = dayOfWeek;
-        this.subjectName = subjectName;
+        this.lectureName = lectureName;
     }
 
     public Long getId() {
@@ -31,35 +23,11 @@ public class Lecture {
         this.id = id;
     }
 
-    public Long getTeacherId() {
-        return teacherId;
+    public String getLectureName() {
+        return lectureName;
     }
 
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    public Integer getLectureNumber() {
-        return lectureNumber;
-    }
-
-    public void setLectureNumber(Integer lectureNumber) {
-        this.lectureNumber = lectureNumber;
-    }
-
-    public Integer getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(Integer dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
+    public void setLectureName(String lectureName) {
+        this.lectureName = lectureName;
     }
 }

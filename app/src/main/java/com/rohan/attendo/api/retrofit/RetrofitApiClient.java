@@ -28,8 +28,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-import retrofit2.http.Header;
 
 /**
  * Created by rohan on 30/9/17.
@@ -185,18 +183,19 @@ public class RetrofitApiClient {
         this.enque(attendanceTokenCall, reverberator);
     }
 
-    public void getLecturesByTeacher(Long teacherId, Reverberator reverberator){
-        Call<List<Lecture>> listCall = this.mRetrofitApiInterface.getLecturesByTeacher(teacherId);
+    public void getTeacherLectures(String authorizationToken, Reverberator reverberator){
+        Call<List<Lecture>> listCall = this.mRetrofitApiInterface.getLecturesForTeacher(authorizationToken);
         this.enque(listCall, reverberator);
     }
 
-    public void getLecturesByDepartment(Long departmentId, Reverberator reverberator){
-        Call<List<Lecture>> listCall = this.mRetrofitApiInterface.getLecturesByDepartment(departmentId);
+    public void getStudentLectures(String authorizationToken, Reverberator reverberator){
+        Call<List<Lecture>> listCall = this.mRetrofitApiInterface.getLecturesForStudent(authorizationToken);
         this.enque(listCall, reverberator);
     }
+
 
     public void bulkInsertAttendance(String authorizationToken, AttendanceBulkInsert bulkInsert, Reverberator reverberator){
-        Call<String> stringCall = this.mRetrofitApiInterface.bulkInsertAttendance(authorizationToken, bulkInsert.getTeacherId(), bulkInsert.getLectureId(), bulkInsert);
+        Call<String> stringCall = this.mRetrofitApiInterface.bulkInsertAttendance(authorizationToken, bulkInsert.getLectureId(), bulkInsert);
         this.enque(stringCall, reverberator);
     }
 
