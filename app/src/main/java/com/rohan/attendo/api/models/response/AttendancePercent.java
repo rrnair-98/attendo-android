@@ -12,6 +12,9 @@ public class AttendancePercent {
     @SerializedName("name")
     private String name;
 
+    @SerializedName("email")
+    private String email;
+
     @SerializedName("percentage")
     private Double percentage;
 
@@ -20,12 +23,13 @@ public class AttendancePercent {
 
     public AttendancePercent(){}
 
-    public AttendancePercent(Long studentId, Long rollNumber, String name, Double percentage, Long totalLectures) {
+    public AttendancePercent(Long studentId, Long rollNumber, String name, Double percentage, Long totalLectures, String email) {
         this.studentId = studentId;
         this.rollNumber = rollNumber;
         this.name = name;
         this.percentage = percentage;
         this.totalLectures = totalLectures;
+        this.email = email;
     }
 
     public Long getStudentId() {
@@ -66,5 +70,13 @@ public class AttendancePercent {
 
     public void setTotalLectures(Long totalLectures) {
         this.totalLectures = totalLectures;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
