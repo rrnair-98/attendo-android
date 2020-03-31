@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.rohan.attendo.R;
 import com.rohan.attendo.api.models.requests.AttendanceBulkInsert;
+import com.rohan.attendo.api.models.requests.AttendanceReportRequest;
 import com.rohan.attendo.api.models.requests.LoginRequest;
 import com.rohan.attendo.api.models.response.AccessToken;
 import com.rohan.attendo.api.models.response.AttendancePercent;
@@ -23,6 +24,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -206,15 +208,19 @@ public class RetrofitApiClient {
     }
 
 
-    public void getStudentAttendance(String authToken, String startDate, String endDate, Long studentLectureId, Reverberator reverberator){
-        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceForStudentByStudentLectureId(studentLectureId);
+    public void getStudentAttendance(String authToken, Long studentLectureId, Reverberator reverberator){
+        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceForStudentByStudentLectureId(authToken, studentLectureId);
         this.enque(listCall, reverberator);
     }
 
-    public void getLectureAttendance(String authToken, String startDate, String endDate, Long lectureId, Reverberator reverberator){
-        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceByLectureId(startDate, endDate, lectureId);
+    public void getAttendanceForTeacherByTeacherLectureId(String authToken, Long teacherLectureId, Reverberator reverberator){
+        Call<List<AttendancePercent>> listCall = this.mRetrofitApiInterface.getAttendanceForTeacherByTeacherLectureId(authToken, teacherLectureId);
         this.enque(listCall, reverberator);
     }
 
+    public void downloadReport(String authToken, AttendanceReportRequest attendanceReportRequest, Reverberator reverberator){
+        Call<ResponseBody> responseBodyCall = this.mRetrofitApiInterface.downloadReportExcel(authToken, attendanceReportRequest);
+        this.enque(responseBodyCall, reverberator);
+    }
 
 }

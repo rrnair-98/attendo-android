@@ -1,6 +1,7 @@
 package com.rohan.attendo.api.retrofit;
 
 import com.rohan.attendo.api.models.requests.AttendanceBulkInsert;
+import com.rohan.attendo.api.models.requests.AttendanceReportRequest;
 import com.rohan.attendo.api.models.requests.LoginRequest;
 import com.rohan.attendo.api.models.response.AccessToken;
 import com.rohan.attendo.api.models.response.AttendancePercent;
@@ -10,6 +11,7 @@ import com.rohan.attendo.api.models.response.User;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -51,20 +53,20 @@ public interface RetrofitApiInterface {
 
 
     @GET("student/attendance/{studentLectureId}")
-    public Call<List<AttendancePercent>> getAttendanceForStudentByStudentLectureId(@Path("studentLectureId") Long studentLectureId);
+    public Call<List<AttendancePercent>> getAttendanceForStudentByStudentLectureId(
+            @Header("Authorization") String authToken,
+            @Path("studentLectureId") Long studentLectureId
+    );
 
 
-    @GET("attendance/student/{start}/{end}/{lectureId}")
-    public Call<List<AttendancePercent>> getAttendanceByLectureId(@Path("start") String startDate,
-                                                                  @Path("end") String endDate,
-                                                                  @Path("lectureId") Long lectureId);
+    @GET("teacher/attendance/{teacherLectureId}")
+    public Call<List<AttendancePercent>> getAttendanceForTeacherByTeacherLectureId(@Header("Authorization") String authToken,
+                                                                  @Path("teacherLectureId") Long teacherLectureId);
 
 
-    @GET("attendance/student/{start}/{end}/{studentId}/{lectureId}")
-    public Call<List<AttendancePercent>> getAttendanceByLectureAndStudentId(@Path("start") String startDate,
-                                                                            @Path("end") String endDate,
-                                                                            @Path("studentId") Long studentId,
-                                                                            @Path("lectureId")Long lectureId);
+    @POST("teacher/report")
+    public Call<ResponseBody> downloadReportExcel(@Header("Authorization") String authToken,
+                                                  @Body AttendanceReportRequest attendanceReportRequest);
 
 }
 
