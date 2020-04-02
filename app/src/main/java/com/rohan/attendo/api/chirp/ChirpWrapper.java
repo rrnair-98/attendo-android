@@ -6,6 +6,7 @@ import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import io.chirp.chirpsdk.ChirpSDK;
 import io.chirp.chirpsdk.interfaces.ChirpEventListener;
@@ -16,12 +17,16 @@ public class ChirpWrapper {
     private ChirpSDK chirpSDK;
     private Context mContext;
     private ChirpError chirpError;
+    private ArrayList<ChirpDataReceiver> mChirpDataReceivers;
     private ChirpEventListener chirpEventListener = new ChirpEventListener() {
 
         @Override
         public void onReceived(byte[] data, int channel) {
             if (data != null) {
                 String identifier = bytesToHexString(data);
+                for(int i = 0; i<mChirpDataReceivers.size(); i++){
+                    mChirpDataReceivers.get(i).chirpDataReceived(identifier);
+                }
                 Log.v("ChirpSDK: ", "Received " + identifier);
             } else {
                 Log.e("ChirpError: ", "Decode failed");
@@ -54,7 +59,6 @@ public class ChirpWrapper {
         }
     };
 
-
     private final static char[] hexArray = "0123456789abcdef".toCharArray();
     private final static String CHIRP_APP_KEY = "1AFAA1289e1CBfeA7557dfcec";
     private final static String CHIRP_APP_SECRET = "e19FEA88cC55abB6d63B7b3E01761EFA874b7FA60Bd976aF73";
@@ -79,6 +83,14 @@ public class ChirpWrapper {
 
     public static ChirpWrapper getInstance(){
         return chirpWrapper;
+    }
+
+    public void addChirpDataReceiver(ChirpDataReceiver chirpDataReceiver){
+        mChirpDataReceivers.add(chirpDataReceiver);
+    }
+
+    public void removeChirpDataReceiver(ChirpDataReceiver chirpDataReceiver){
+        mChirpDataReceivers.remove(chirpDataReceiver);
     }
 
     public void sendData(String data){
@@ -126,5 +138,8 @@ public class ChirpWrapper {
         return this.chirpSDK;
     }
 
+    public interface ChirpDataReceiver{
+        void chirpDataReceived(String receivedData);
+    }
 
 }
