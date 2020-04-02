@@ -1,6 +1,8 @@
 package com.rohan.attendo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.rohan.attendo.R;
+import com.rohan.attendo.api.chirp.ChirpWrapper;
+import com.rohan.attendo.api.models.response.AccessToken;
+import com.rohan.attendo.api.models.response.AttendanceToken;
 import com.rohan.attendo.api.models.response.Lecture;
 import com.rohan.attendo.api.retrofit.RetrofitApiClient;
+import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
+import com.rohan.attendo.services.WhistleBlower;
 
 
 public class StudentAudioQrFragment extends Fragment {
@@ -28,6 +35,9 @@ public class StudentAudioQrFragment extends Fragment {
     private Button mPresentSirButton;
     private TokenHelper tokenHelper;
     private RetrofitApiClient client;
+    private boolean mSendAttendanceToken;
+
+    private static String TAG = "StudentAudioQr";
 
     @Nullable
     @Override
@@ -45,6 +55,22 @@ public class StudentAudioQrFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Present Sir!!!", Toast.LENGTH_SHORT).show();
+                RetrofitApiClient.getInstance().getOrCreateAttendanceToken(
+                        TokenHelper.getInstance().getToken().getAccessToken(),
+                        new Reverberator() {
+                            @Override
+                            public void reverb(Object data, int httpResponseCode) {
+                                if(httpResponseCode == 200){
+                                    AttendanceToken attendanceToken = (AttendanceToken) data;
+                                    startAttendanceTransmission(attendanceToken);
+                                }
+                                else {
+                                    Log.e(TAG, httpResponseCode+" Failed to fetch attendance token");
+                                }
+
+                            }
+                        }
+                );
             }
         });
         return view;
@@ -52,5 +78,11 @@ public class StudentAudioQrFragment extends Fragment {
 
     public void setLecture(Lecture lecture) {
         mLecture = lecture;
+    }
+
+    private void startAttendanceTransmission(final AttendanceToken attendanceToken) {
+        Intent intent = new Intent(getContext(), WhistleBlower.class);
+        intent.setAction(WhistleBlower.ACTION_START_CHIRPING);
+        getContext().startService(intent);
     }
 }
