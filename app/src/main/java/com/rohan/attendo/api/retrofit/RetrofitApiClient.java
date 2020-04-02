@@ -160,6 +160,7 @@ public class RetrofitApiClient {
             public void onFailure(Call call, Throwable t) {
                 Log.d(TAG,"Couldnt fetch data from server ... read the stackTrace for more info");
                 t.printStackTrace();
+                if(t.getCause() != null){ t.getCause().printStackTrace(); }
                 if(reverberator!=null)
                     reverberator.reverb(null, 500);
             }
