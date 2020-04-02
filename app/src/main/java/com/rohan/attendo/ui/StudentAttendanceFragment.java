@@ -48,6 +48,7 @@ public class StudentAttendanceFragment extends Fragment {
         }catch (ParseException e){
             e.printStackTrace();
         }
+        // TODO: following line gives syntax error
         this.client.getStudentAttendance(this.tokenHelper.getToken().getAccessToken(), startDate, endDate, this.tokenHelper.getToken().getId(), (Object data, int httpResponse)->{
             if (httpResponse == 200){
                 this.attendancePercentList = (List<AttendancePercent>)data;
