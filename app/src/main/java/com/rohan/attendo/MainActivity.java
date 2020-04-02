@@ -52,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
             @Override
             public void reverb(Object data, int httpResponseCode) {
                 if(httpResponseCode == 200){
-                    Log.d(TAG, ((AccessToken) data).getAccessToken());
-                }else
+                    TokenHelper.getInstance(getApplicationContext()).persistToken((AccessToken) data);
+                    Log.d(TAG, TokenHelper.getInstance().getToken().getAccessToken());
+                }else{
                     Log.e(TAG, httpResponseCode+" Failed to Login");
+                }
             }
         });
         init();
