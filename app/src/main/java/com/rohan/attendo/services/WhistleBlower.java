@@ -3,7 +3,9 @@ package com.rohan.attendo.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,10 +26,13 @@ public class WhistleBlower extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public int onStartCommand(Intent intent){
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if(intent != null){
+            Log.d(TAG, "Intent Received, ACTION = "+intent.getAction());
             if(intent.getAction().equals(ACTION_START_CHIRPING)){
                 if(ChirperThread.canScheduleShirper()){
+                    Log.d(TAG, "Initializing Thread for Chirping= "+intent.getStringExtra(ACCESS_TOKEN_EXTRA));
                     ChirperThread.scheduleChirper(this, intent.getStringExtra(ACCESS_TOKEN_EXTRA));
                 }
             }
@@ -49,7 +54,7 @@ public class WhistleBlower extends Service {
         }
 
         public static boolean canScheduleShirper(){
-            return sChirperThread!=null && !sChirperThread.isAlive();
+            return sChirperThread==null || !sChirperThread.isAlive();
         }
 
         public static void scheduleChirper(Context context, String attendanceToken){
@@ -79,17 +84,35 @@ public class WhistleBlower extends Service {
                     if(receivedData.equals(mAttendanceToken)){
                         Log.d(TAG, "STOPPED Chirping");
                         setKeepChirping(false);
-                        Toast.makeText(mContext, "Attendance Marked", Toast.LENGTH_SHORT).show();
+                        showToast("Attendance Marked");
                     }
                 }
             };
             mChirpWrapper.addChirpDataReceiver(chirpDataReceiver);
-            Toast.makeText(mContext, "Marking you present", Toast.LENGTH_SHORT).show();
+            showToast("Marking you present");
             while (getKeepChirping()){
                 mChirpWrapper.sendData(mAttendanceToken);
                 Log.d(TAG, "SENT: "+mAttendanceToken);
+                sleepFor(5000);
             }
             mChirpWrapper.removeChirpDataReceiver(chirpDataReceiver);
+        }
+
+        public void sleepFor(long millis){
+            try {
+                Thread.sleep(millis);
+            }
+            catch (InterruptedException ie){
+                Log.d(TAG, "InterruptedException", ie);
+            }
+        }
+
+        public void showToast(String message){
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                public void run() {
+                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

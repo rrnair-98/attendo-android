@@ -82,7 +82,8 @@ public class StudentAudioQrFragment extends Fragment {
 
     private void startAttendanceTransmission(final AttendanceToken attendanceToken) {
         Intent intent = new Intent(getContext(), WhistleBlower.class);
+        intent.putExtra(WhistleBlower.ACCESS_TOKEN_EXTRA, attendanceToken.getToken());
         intent.setAction(WhistleBlower.ACTION_START_CHIRPING);
-        getContext().startService(intent);
+        getActivity().startService(intent);
     }
 }

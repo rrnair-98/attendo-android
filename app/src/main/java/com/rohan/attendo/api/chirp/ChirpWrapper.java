@@ -17,7 +17,7 @@ public class ChirpWrapper {
     private ChirpSDK chirpSDK;
     private Context mContext;
     private ChirpError chirpError;
-    private ArrayList<ChirpDataReceiver> mChirpDataReceivers;
+    private ArrayList<ChirpDataReceiver> mChirpDataReceivers = new ArrayList<>();
     private ChirpEventListener chirpEventListener = new ChirpEventListener() {
 
         @Override
@@ -127,7 +127,7 @@ public class ChirpWrapper {
         int len = s.length();
         byte[] data = new byte[len/2];
 
-        for(int i = 0; i < len; i+=2){
+        for(int i = 0; i < len-1; i+=2){
             data[i/2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
         }
 
