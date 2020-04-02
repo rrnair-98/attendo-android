@@ -1,7 +1,11 @@
 package com.rohan.attendo.api.models.requests;
 
+import com.google.gson.annotations.SerializedName;
+
 public class LoginRequest {
+    @SerializedName("email")
     private String email;
+    @SerializedName("password")
     private String password;
 
     public LoginRequest(){}

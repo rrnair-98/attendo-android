@@ -2,7 +2,9 @@ package com.rohan.attendo.api.models.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AccessToken {
+import java.io.Serializable;
+
+public class AccessToken implements Serializable{
 
     private Long id;
     @SerializedName("user_id")

@@ -38,8 +38,8 @@ public class StudentAttendanceAdapter extends RecyclerView.Adapter<StudentAttend
         holder.percentage.setText(current.getPercentage().toString());
         holder.totalLectures.setText(current.getTotalLectures().toString());
         // TODO: Following lines give syntax error
-        holder.lecturesSat.setText(current.getLecsAttended().toString());
-        holder.lectureName.setText(current.getLectureName());
+        /*holder.lecturesSat.setText(current.getLecsAttended().toString());
+        holder.lectureName.setText(current.getLectureName());*/
     }
 
     @Override
