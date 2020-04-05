@@ -91,7 +91,6 @@ public class TeacherAudioQrFragment extends Fragment {
         mRollCaller = new AsyncTask<Object, String, Object>() {
             @Override
             protected Object doInBackground(Object... objects) {
-                Set<String> attendanceTokens = new HashSet<>();
                 ChirpWrapper.ChirpDataReceiver chirpDataReceiver = new ChirpWrapper.ChirpDataReceiver() {
                     @Override
                     public void chirpDataReceived(String receivedData) {

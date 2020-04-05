@@ -33,6 +33,7 @@ public class StudentAudioQrFragment extends Fragment {
     private TextView mLectureIcon;
     private TextView mLectureNameTextView;
     private Button mPresentSirButton;
+    private Button mFinishButton;
     private TokenHelper tokenHelper;
     private RetrofitApiClient client;
     private boolean mSendAttendanceToken;
@@ -50,6 +51,16 @@ public class StudentAudioQrFragment extends Fragment {
         mLectureNameTextView = view.findViewById(R.id.lectureName);
         mLectureNameTextView.setText(mLecture.getLectureName());
         mPresentSirButton = view.findViewById(R.id.qrSend);
+        mFinishButton = view.findViewById(R.id.finish);
+        mFinishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), WhistleBlower.class);
+                intent.setAction(WhistleBlower.ACTION_STOP_CHIRPING);
+                getActivity().startService(intent);
+                getActivity().onBackPressed();
+            }
+        });
         mPresentSirButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +75,12 @@ public class StudentAudioQrFragment extends Fragment {
                                     startAttendanceTransmission(attendanceToken);
                                 }
                                 else {
+                                    Toast.makeText(getActivity(), "Failed to connect to server.", Toast.LENGTH_SHORT).show();
+                                    AttendanceToken attendanceToken = new AttendanceToken();
+                                    attendanceToken.setToken("RAHUL");
+                                    startAttendanceTransmission(attendanceToken);
                                     Log.e(TAG, httpResponseCode+" Failed to fetch attendance token");
                                 }
-
                             }
                         }
                 );

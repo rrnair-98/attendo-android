@@ -14,9 +14,10 @@ import com.rohan.attendo.api.models.response.AttendanceToken;
 
 public class WhistleBlower extends Service {
     public static String ACTION_START_CHIRPING = "com.rohan.attendo.services.WhistleBlower.start_chirping";
+    public static String ACTION_STOP_CHIRPING = "com.rohan.attendo.services.WhistleBlower.stop_chirping";
     public static String ACCESS_TOKEN_EXTRA = "accessTokenExtra";
     public static String TAG = "WhistleBlower";
-    private boolean mKeepChirping;
+    private ChirperThread mChirperThread;
     public WhistleBlower() {
     }
 
@@ -33,7 +34,12 @@ public class WhistleBlower extends Service {
             if(intent.getAction().equals(ACTION_START_CHIRPING)){
                 if(ChirperThread.canScheduleShirper()){
                     Log.d(TAG, "Initializing Thread for Chirping= "+intent.getStringExtra(ACCESS_TOKEN_EXTRA));
-                    ChirperThread.scheduleChirper(this, intent.getStringExtra(ACCESS_TOKEN_EXTRA));
+                    mChirperThread = ChirperThread.scheduleChirper(this, intent.getStringExtra(ACCESS_TOKEN_EXTRA));
+                }
+            }
+            else if(intent.getAction().equals(ACTION_STOP_CHIRPING)){
+                if(mChirperThread != null){
+                    mChirperThread.setKeepChirping(false);
                 }
             }
         }
@@ -57,7 +63,7 @@ public class WhistleBlower extends Service {
             return sChirperThread==null || !sChirperThread.isAlive();
         }
 
-        public static void scheduleChirper(Context context, String attendanceToken){
+        public static ChirperThread scheduleChirper(Context context, String attendanceToken){
             if(canScheduleShirper()){
                 sChirperThread = new ChirperThread(attendanceToken);
                 sChirperThread.mContext = context;
@@ -66,6 +72,7 @@ public class WhistleBlower extends Service {
             else{
                 Log.d(TAG, "Chirper Already In Process");
             }
+            return sChirperThread;
         }
 
         synchronized private void setKeepChirping(boolean keepChirping){
@@ -81,7 +88,7 @@ public class WhistleBlower extends Service {
             ChirpWrapper.ChirpDataReceiver chirpDataReceiver = new ChirpWrapper.ChirpDataReceiver() {
                 @Override
                 public void chirpDataReceived(String receivedData) {
-                    if(receivedData.equals(mAttendanceToken)){
+                    if(receivedData.equals("RECEIVED"+mAttendanceToken)){
                         Log.d(TAG, "STOPPED Chirping");
                         setKeepChirping(false);
                         showToast("Attendance Marked");
