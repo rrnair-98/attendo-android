@@ -1,6 +1,7 @@
 package com.rohan.attendo.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.rohan.attendo.R;
 import com.rohan.attendo.api.models.response.Lecture;
 import com.rohan.attendo.api.retrofit.RetrofitApiClient;
+import com.rohan.attendo.api.retrofit.Reverberator;
 import com.rohan.attendo.helpers.TokenHelper;
 import com.rohan.attendo.ui.adapters.LectureAdapter;
 
@@ -25,10 +27,12 @@ import java.util.List;
 
 public class LectureListFragment extends Fragment {
 
+    private static final String TAG = "LectureListFrag";
+
     private RecyclerView recyclerView;
     private RetrofitApiClient client;
     private TokenHelper tokenHelper;
-    private List<Lecture> mLectureList;
+    private List<Lecture> mLectureList = new ArrayList<>();;
     private LectureAdapter mLectureAdapter;
 
     private LectureClickedListener mLectureClickedListener;
@@ -43,18 +47,7 @@ public class LectureListFragment extends Fragment {
         this.mLectureList= new ArrayList<>();
         this.recyclerView = view.findViewById(R.id.lectureRecyclerView);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        TODO: delete the next 3 lines and uncomment lines after that
-        this.mLectureList = new ArrayList<>();
-        for(int i = 0; i<10; i++){
-            mLectureList.add(new Lecture((long)i, "LECTURE "+i));
-        }
-//
-//        this.client.getTeacherLectures(this.tokenHelper.getToken().getAccessToken(), (Object data, int httpResponse)->{
-//            if (httpResponse == 200){
-//                this.mLectureList= (List<Lecture>)data;
-//                this.mLectureAdapter.notifyDataSetChanged();
-//            }
-//        });
+        populateLectureList(this.mLectureList);
         this.mLectureAdapter= new LectureAdapter(view.getContext(), this.mLectureList,
           mLectureClickedListener);
         recyclerView.setAdapter(this.mLectureAdapter);
@@ -63,6 +56,37 @@ public class LectureListFragment extends Fragment {
 
     public void setLectureClickedListener(LectureClickedListener lectureClickedListener) {
         mLectureClickedListener = lectureClickedListener;
+    }
+
+    private void populateLectureList(List<Lecture> lectureList){
+        for(int i = 0; i<30; i++){
+            lectureList.add(new Lecture((long)i, "Lecture: "+i));
+        }
+        Reverberator lectureListReverberator = new Reverberator() {
+            @Override
+            public void reverb(Object data, int httpResponseCode) {
+                if(httpResponseCode == 200){
+                    lectureList.clear();
+                    lectureList.addAll((ArrayList<Lecture>) data);
+                    mLectureAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.d(TAG, "ERROR IN FETCHING LECTURE LIST");
+                }
+            }
+        };
+        if(this.tokenHelper.getToken().isStudent()){
+            RetrofitApiClient.getInstance(getActivity()).getStudentLectures(
+                    this.tokenHelper.getToken().getAccessToken(),
+                    lectureListReverberator
+            );
+        }
+        else if(this.tokenHelper.getToken().isTeacher()){
+            RetrofitApiClient.getInstance(getActivity()).getTeacherLectures(
+                    this.tokenHelper.getToken().getAccessToken(),
+                    lectureListReverberator
+            );
+        }
     }
 
     public static interface LectureClickedListener{
