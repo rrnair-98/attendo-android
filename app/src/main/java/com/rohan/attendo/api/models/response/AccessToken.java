@@ -1,5 +1,7 @@
 package com.rohan.attendo.api.models.response;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -40,7 +42,7 @@ public class AccessToken implements Serializable{
     }
 
     public Long getId() {
-        return id;
+        return id == null ? -100 : id;
     }
 
     public void setId(Long id) {
@@ -48,7 +50,7 @@ public class AccessToken implements Serializable{
     }
 
     public Long getUserId() {
-        return userId;
+        return userId == null ? -100 : userId;
     }
 
     public void setUserId(Long userId) {
@@ -56,7 +58,7 @@ public class AccessToken implements Serializable{
     }
 
     public Long getCreatedAt() {
-        return accessTokenExpiry;
+        return accessTokenExpiry == null ? -100 : accessTokenExpiry;
     }
 
     public void setCreatedAt(Long createdAt) {
@@ -64,7 +66,7 @@ public class AccessToken implements Serializable{
     }
 
     public Long getRefreshTokenExpiresAt() {
-        return refreshTokenExpiresAt;
+        return refreshTokenExpiresAt == null ? -100 : refreshTokenExpiresAt;
     }
 
     public void setRefreshTokenExpiresAt(Long refreshTokenExpiresAt) {
@@ -72,7 +74,7 @@ public class AccessToken implements Serializable{
     }
 
     public String getAccessToken() {
-        return accessToken;
+        return accessToken == null ? "" : accessToken;
     }
 
     public void setAccessToken(String accessToken) {
@@ -80,7 +82,7 @@ public class AccessToken implements Serializable{
     }
 
     public String getRefreshToken() {
-        return refreshToken;
+        return refreshToken == null ? "" : refreshToken;
     }
 
     public void setRefreshToken(String refreshToken) {
@@ -96,5 +98,9 @@ public class AccessToken implements Serializable{
     }
 
     public boolean isHOD(){return this.role.equals(ROLE_HOD) || this.role.equals(ROLE_ADMIN);}
+
+    public Integer getRole(){ return  role; }
+
+    public void setRole(Integer role){ this.role = role; }
 
 }
