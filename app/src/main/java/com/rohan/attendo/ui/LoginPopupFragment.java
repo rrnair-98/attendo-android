@@ -1,6 +1,7 @@
 package com.rohan.attendo.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.rohan.attendo.api.retrofit.Reverberator;
 
 public class LoginPopupFragment extends DialogFragment implements Reverberator {
 
+    private static final String TAG = "LoginPopUpFrag";
+
     private EditText email, password;
     private Button buttonOk;
     private static MainActivity mainActivityRef;
@@ -28,7 +31,7 @@ public class LoginPopupFragment extends DialogFragment implements Reverberator {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login_fragment, container, true);
+        View view = inflater.inflate(R.layout.login_fragment, container, false);
 
         this.client = RetrofitApiClient.getInstance();
         this.email = view.findViewById(R.id.userEmail);
@@ -37,7 +40,6 @@ public class LoginPopupFragment extends DialogFragment implements Reverberator {
         this.buttonOk.setOnClickListener((View v1)->{
             this.client.login(new LoginRequest(this.email.getText().toString(), this.password.getText().toString()), this);
         });
-        
         return view;
     }
 
@@ -46,7 +48,7 @@ public class LoginPopupFragment extends DialogFragment implements Reverberator {
     public void reverb(Object data, int httpResponseCode) {
         if(httpResponseCode == 200){
             this.callback.onLoginSuccess((AccessToken) data);
-        
+
         }else 
             this.callback.onLoginFailed();
     }
