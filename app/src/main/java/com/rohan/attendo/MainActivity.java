@@ -47,18 +47,7 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
         Toolbar toolbar = findViewById(R.id.toolbar);
         this.chirpWrapper = ChirpWrapper.getInstance(this);
         setSupportActionBar(toolbar);
-
-        RetrofitApiClient.getInstance(this).login(new LoginRequest("anton@gmail.com", "password"), new Reverberator() {
-            @Override
-            public void reverb(Object data, int httpResponseCode) {
-                if(httpResponseCode == 200){
-                    TokenHelper.getInstance(getApplicationContext()).persistToken((AccessToken) data);
-                    Log.d(TAG, TokenHelper.getInstance().getToken().getAccessToken());
-                }else{
-                    Log.e(TAG, httpResponseCode+" Failed to Login");
-                }
-            }
-        });
+        RetrofitApiClient.getInstance(this);
         init();
     }
 
@@ -90,9 +79,11 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
      */
     @Override
     public void onLoginSuccess(AccessToken accessToken) {
+        Log.d(TAG, "ACCESS TOKEN  = "+accessToken.getRole());
         this.tokenHelper.persistToken(accessToken);
         // hide current login fragment
         Snackbar.make(this.findViewById(R.id.coordinatorSnackbarContainer), "Logged in", Snackbar.LENGTH_SHORT).show();
+        showLectureList();
     }
 
     @Override
@@ -147,17 +138,32 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
 
     private void init(){
-//        this.fragmentManager = this.getSupportFragmentManager();
-//        this.tokenHelper = TokenHelper.getInstance(this);
-//        this.tokenHelper.readToken();
-//        if(this.tokenHelper.isTokenNull()){
-//            //todo show popup dialog
-//        }
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        LectureListFragment lectureListFragment = new LectureListFragment();
-        lectureListFragment.setLectureClickedListener(this);
-        fragmentTransaction.add(R.id.fragmentHolder, lectureListFragment).commit();
+        this.fragmentManager = this.getSupportFragmentManager();
+        this.tokenHelper = TokenHelper.getInstance(this);
+        this.tokenHelper.readToken();
+        if(this.tokenHelper.isTokenNull()){
+            LoginPopupFragment loginPopupFragment = LoginPopupFragment.getInstance(this, this);
+            this.fragmentManager.beginTransaction().add(R.id.fragmentHolder, loginPopupFragment).commit();
+        }
+        else {
+            Log.d(TAG, "USER IS ALREADY LOGGED IN, role = "+tokenHelper.getToken().getRole());
+            showLectureList();
+        }
+    }
+
+    private void makeRootLogin(){
+        RetrofitApiClient.getInstance(this).login(new LoginRequest("anton@gmail.com", "password"), new Reverberator() {
+            @Override
+            public void reverb(Object data, int httpResponseCode) {
+                if(httpResponseCode == 200){
+                    TokenHelper.getInstance(getApplicationContext()).persistToken((AccessToken) data);
+                    Log.d(TAG, TokenHelper.getInstance().getToken().getAccessToken());
+                    Log.d(TAG, "ROLE "+TokenHelper.getInstance().getToken().getRole());
+                }else{
+                    Log.e(TAG, httpResponseCode+" Failed to Login");
+                }
+            }
+        });
     }
 
 
@@ -174,5 +180,13 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
         FragmentManager fragmentManager = this.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentHolder, studentAudioQrFragment).addToBackStack(null).commit();
+    }
+
+    private void showLectureList(){
+        if(this.tokenHelper.getToken().isStudent()){
+            LectureListFragment lectureListFragment = new LectureListFragment();
+            lectureListFragment.setLectureClickedListener(this);
+            this.fragmentManager.beginTransaction().add(R.id.fragmentHolder, lectureListFragment).commit();
+        }
     }
 }
