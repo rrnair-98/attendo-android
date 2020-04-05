@@ -45,7 +45,6 @@ public class StudentAudioQrFragment extends Fragment {
         View view = inflater.inflate(R.layout.student_audio_qr_fragment, container, false);
         this.tokenHelper = TokenHelper.getInstance();
         this.client = RetrofitApiClient.getInstance();
-        // TODO:  add code to fetch present token
         mLectureIcon = view.findViewById(R.id.lectureIcon);
         mLectureIcon.setText(mLecture.getLectureName().substring(0,1));
         mLectureNameTextView = view.findViewById(R.id.lectureName);

@@ -15,6 +15,7 @@ import com.rohan.attendo.helpers.TokenHelper;
 import com.rohan.attendo.ui.LectureListFragment;
 import com.rohan.attendo.ui.LoginPopupFragment;
 import com.rohan.attendo.ui.StudentAudioQrFragment;
+import com.rohan.attendo.ui.TeacherAudioQrFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -175,11 +176,22 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
     @Override
     public void onLectureClicked(Lecture lecture) {
-        StudentAudioQrFragment studentAudioQrFragment = new StudentAudioQrFragment();
-        studentAudioQrFragment.setLecture(lecture);
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentHolder, studentAudioQrFragment).addToBackStack(null).commit();
+//        if(false){
+         if(TokenHelper.getInstance().getToken().isStudent()){
+            StudentAudioQrFragment studentAudioQrFragment = new StudentAudioQrFragment();
+            studentAudioQrFragment.setLecture(lecture);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentHolder, studentAudioQrFragment).addToBackStack(null).commit();
+        }
+        else if(TokenHelper.getInstance().getToken().isTeacher()){
+            Log.d(TAG, "Teacher SIDE");
+            TeacherAudioQrFragment teacherAudioQrFragment = new TeacherAudioQrFragment();
+            teacherAudioQrFragment.setLecture(lecture);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentHolder, teacherAudioQrFragment).addToBackStack(null).commit();
+        }
     }
 
     private void showLectureList(){
