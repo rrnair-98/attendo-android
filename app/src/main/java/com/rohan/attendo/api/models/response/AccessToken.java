@@ -88,13 +88,13 @@ public class AccessToken implements Serializable{
     }
 
     public boolean isTeacher(){
-        return this.role.equals(ROLE_TEACHER);
+        return this.role.equals(ROLE_TEACHER) || this.role.equals(ROLE_ADMIN);
     }
 
     public boolean isStudent(){
-        return this.role.equals( ROLE_STUDENT);
+        return this.role.equals( ROLE_STUDENT) || this.role.equals(ROLE_ADMIN);
     }
 
-    public boolean isHOD(){return this.role.equals(ROLE_HOD);}
+    public boolean isHOD(){return this.role.equals(ROLE_HOD) || this.role.equals(ROLE_ADMIN);}
 
 }
