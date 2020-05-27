@@ -196,10 +196,8 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
 
     private void showLectureList(){
         Log.d(TAG, "is Student " + this.tokenHelper.getToken().isStudent());
-        if(this.tokenHelper.getToken().isStudent()){
-            LectureListFragment lectureListFragment = new LectureListFragment();
-            lectureListFragment.setLectureClickedListener(this);
-            this.fragmentManager.beginTransaction().add(R.id.fragmentHolder, lectureListFragment).commit();
-        }
+        LectureListFragment lectureListFragment = new LectureListFragment();
+        lectureListFragment.setLectureClickedListener(this);
+        this.fragmentManager.beginTransaction().add(R.id.fragmentHolder, lectureListFragment).commit();
     }
 }
