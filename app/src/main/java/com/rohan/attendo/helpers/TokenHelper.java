@@ -61,8 +61,7 @@ public class TokenHelper {
         token.setCreatedAt(sharedPref.getLong("accessTokenExpiry", 0));
         token.setRefreshTokenExpiresAt(sharedPref.getLong("refreshTokenExpiresAt", 0));
         token.setAccessToken(sharedPref.getString("accessToken", null));
-        token.setRefreshToken(sharedPref.getString("refreshToken", ""));
-        if (token.getAccessToken() == null){
+        if (token.getAccessToken() == null || token.getAccessToken().length() == 0){
             token = null;
             return;
         }

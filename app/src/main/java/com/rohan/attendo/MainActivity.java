@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
         this.tokenHelper.persistToken(accessToken);
         // hide current login fragment
         Snackbar.make(this.findViewById(R.id.coordinatorSnackbarContainer), "Logged in", Snackbar.LENGTH_SHORT).show();
-        showLectureList();
+        init();
     }
 
     @Override
@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements LoginPopupFragmen
     }
 
     private void showLectureList(){
+        Log.d(TAG, "is Student " + this.tokenHelper.getToken().isStudent());
         if(this.tokenHelper.getToken().isStudent()){
             LectureListFragment lectureListFragment = new LectureListFragment();
             lectureListFragment.setLectureClickedListener(this);
